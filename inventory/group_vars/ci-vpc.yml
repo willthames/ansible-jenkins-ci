@@ -1,0 +1,43 @@
+cidr: 10.1.0.0/16
+name: ci-vpc
+
+subnets:
+- name: ci-elb-subnet
+  public: "True"
+  cidr: 10.1.1.0/24
+- name: ci-bastion-subnet
+  public: "True"
+  cidr: 10.1.2.0/24
+- name: ci-web-subnet
+  public: "False"
+  cidr: 10.1.11.0/24
+- name: ci-agent-subnet
+  public: "False"
+  cidr: 10.1.21.0/24
+
+security_groups:
+- name: ci-elb-sg
+  rules:
+  - cidr: 0.0.0.0/32
+    ports:
+    - 80
+    - 443
+    proto: tcp
+- name: ci-bastion-sg
+  rules:
+  - cidr: 0.0.0.0/32
+    ports: 22
+    proto: tcp
+- name: ci-web-sg
+  rules:
+  - group_name: ci-bastion-sg
+    ports: 22
+    proto: tcp
+  - group_name: ci-elb-sg
+    ports: 8080
+    proto: tcp
+- name: ci-agent-sg
+  rules:
+  - group_name: ci-web-sg
+    ports: 5000
+    proto: tcp

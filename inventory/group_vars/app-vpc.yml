@@ -1,0 +1,36 @@
+env: app
+cidr: 10.2.0.0/16
+name: app-vpc
+
+subnets:
+- name: app-elb
+  public: "True"
+  cidr: 10.2.1.0/24
+- name: app-bastion
+  public: "True"
+  cidr: 10.2.2.0/24
+- name: app-web
+  public: "False"
+  cidr: 10.2.11.0/24
+
+security_groups:
+- name: app-elb-sg
+  rules:
+  - cidr: 0.0.0.0/32
+    ports:
+    - 80
+    - 443
+    proto: tcp
+- name: app-bastion-sg
+  rules:
+  - cidr: 0.0.0.0/32
+    ports: 22
+    proto: tcp
+- name: app-web-sg
+  rules:
+  - group_name: app-bastion-sg
+    ports: 22
+    proto: tcp
+  - group_name: app-elb-sg
+    ports: 8080
+    proto: tcp

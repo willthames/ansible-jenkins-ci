@@ -1,0 +1,59 @@
+- name: ensure vpc exists
+  ec2_vpc_net:
+    name: "{{ env }}"
+    cidr_block: "{{ cidr }}"
+    region: "{{ region }}"
+    profile: "{{ profile|default(omit) }}"
+  register: vpc_create
+
+- name: create subnets
+  ec2_vpc_subnet:
+    cidr: "{{ item.cidr }}"
+    az: "{{ region }}a"  # single subnet only
+    vpc_id: "{{ vpc_create.vpc.id }}"
+    region: "{{ region }}"
+    profile: "{{ profile|default(omit) }}"
+    tags:
+      Public: "{{ item.public }}"
+      Name: "{{ item.name }}"
+  with_items: "{{ subnets }}"
+  register: vpc_subnets
+
+- name: create internet gateway
+  ec2_vpc_igw:
+    vpc_id: "{{ vpc_create.vpc.id }}"
+    region: "{{ region }}"
+    profile: "{{ profile|default(omit) }}"
+
+- name: select public subnets
+  ec2_vpc_subnet_facts:
+    filters:
+      tag:Public: "True"
+      vpc-id: "{{ vpc_create.vpc.id }}"
+    region: "{{ region }}"
+    profile: "{{ profile|default(omit) }}"
+  register: public_subnets
+
+- name: create public route table
+  ec2_vpc_route_table:
+    tags:
+      Name: public
+    subnets: "{{ public_subnets | json_query('subnets[].id') }}"
+    routes:
+    - dest: 0.0.0.0/0
+      gateway_id: igw
+    vpc_id: "{{ vpc_create.vpc.id }}"
+    region: "{{ region }}"
+    profile: "{{ profile|default(omit) }}"
+
+- name: create security groups
+  ec2_group:
+    name: "{{ item.name }}"
+    rules: "{{ item.rules }}"
+    vpc_id: "{{ vpc_create.vpc.id }}"
+    region: "{{ region }}"
+    profile: "{{ profile|default(omit) }}"
+    description: "{{ item.name }}"
+  with_items: "{{ security_groups }}"
+
+# in a real VPC you'd want NAT gateways, Network ACLs

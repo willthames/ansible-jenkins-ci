@@ -1,0 +1,4 @@
+- hosts: ci-vpc:app-vpc
+
+  roles:
+  - ec2_vpc

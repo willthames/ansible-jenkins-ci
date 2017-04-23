@@ -6,12 +6,15 @@ subnets:
 - name: app-elb
   public: "True"
   cidr: 10.2.1.0/24
+  zone: ap-southeast-2a
 - name: app-bastion
   public: "True"
   cidr: 10.2.2.0/24
+  zone: ap-southeast-2a
 - name: app-web
   public: "False"
   cidr: 10.2.11.0/24
+  zone: ap-southeast-2a
 
 security_groups:
 - name: app-elb-sg

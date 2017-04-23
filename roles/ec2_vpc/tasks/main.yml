@@ -9,12 +9,12 @@
 - name: create subnets
   ec2_vpc_subnet:
     cidr: "{{ item.cidr }}"
-    az: "{{ region }}a"  # single subnet only
+    az: "{{ item.zone }}"  # single subnet only
     vpc_id: "{{ vpc_create.vpc.id }}"
     region: "{{ region }}"
     profile: "{{ profile|default(omit) }}"
     tags:
-      Public: "{{ item.public }}"
+      Public: "{{ item.public|string }}"
       Name: "{{ item.name }}"
   with_items: "{{ subnets }}"
   register: vpc_subnets

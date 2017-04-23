@@ -5,15 +5,19 @@ subnets:
 - name: ci-elb-subnet
   public: "True"
   cidr: 10.1.1.0/24
+  zone: ap-southeast-2a
 - name: ci-bastion-subnet
   public: "True"
   cidr: 10.1.2.0/24
+  zone: ap-southeast-2a
 - name: ci-web-subnet
   public: "False"
   cidr: 10.1.11.0/24
+  zone: ap-southeast-2a
 - name: ci-agent-subnet
   public: "False"
   cidr: 10.1.21.0/24
+  zone: ap-southeast-2a
 
 security_groups:
 - name: ci-elb-sg

@@ -1,0 +1,8 @@
+- ec2_elb_lb:
+    name: "{{ item.name }}"
+    zones: "{{ item.zones }}"
+    listeners: "{{ item.listeners }}"
+    state: present
+    region: "{{ region }}"
+    profile: "{{ profile|default(omit) }}"
+  with_items: "{{ load_balancers|default([]) }}"

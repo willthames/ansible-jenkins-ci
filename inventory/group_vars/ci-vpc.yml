@@ -45,3 +45,12 @@ security_groups:
   - group_name: ci-web-sg
     ports: 5000
     proto: tcp
+
+load_balancers:
+- name: jenkins-elb
+  zones:
+  - ap-southeast-2a
+  listeners:
+  - protocol: http
+    load_balancer_port: 80
+    instance_port: 8080

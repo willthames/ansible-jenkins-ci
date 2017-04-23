@@ -23,9 +23,9 @@
       Environment: "{{ env }}"
     vpc_subnet_id: "{{ ec2_instance_subnet_fact.subnets[0].id }}"
     group: "{{ ec2_instance_sg }}"
-    profile: "{{ profile|default(omit) }}"
-    region: "{{ region }}"
     image: "{{ ec2_instance_image }}"
     assign_public_ip: "{{ ec2_instance_public_ip }}"
     wait: yes
     wait_timeout: 300
+    profile: "{{ profile|default(omit) }}"
+    region: "{{ region }}"

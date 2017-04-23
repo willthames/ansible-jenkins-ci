@@ -1,0 +1,4 @@
+- hosts: ci-bastion-runner
+
+  roles:
+  - ec2_instance

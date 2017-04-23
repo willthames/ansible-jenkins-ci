@@ -1,9 +1,17 @@
 [runner]
 ci-vpc-runner
 app-vpc-runner
+ci-bastion-runner
+
+[ci:children]
+ci-vpc
+ci-bastion
 
 [ci-vpc]
 ci-vpc-runner
+
+[ci-bastion]
+ci-bastion-runner
 
 [app-vpc]
 app-vpc-runner

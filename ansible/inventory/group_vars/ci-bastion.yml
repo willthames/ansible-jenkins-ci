@@ -4,3 +4,4 @@ ec2_instance_sg: ci-bastion-sg
 ec2_instance_subnet: ci-bastion-subnet
 ec2_instance_key_name: ci-bastion
 ec2_instance_public_ip: yes
+ec2_instance_application: bastion

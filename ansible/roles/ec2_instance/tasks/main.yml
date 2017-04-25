@@ -19,7 +19,7 @@
     instance_type: "{{ ec2_instance_size }}"
     key_name: "{{ ec2_instance_key_name }}"
     instance_tags:
-      Application: ec2_instance
+      Application: "{{ ec2_instance_application }}"
       Environment: "{{ env }}"
     vpc_subnet_id: "{{ ec2_instance_subnet_fact.subnets[0].id }}"
     group: "{{ ec2_instance_sg }}"

@@ -16,8 +16,18 @@
     tags:
       Public: "{{ item.public|string }}"
       Name: "{{ item.name }}"
+      NatGateway: "{{ (item.nat_gateway | default('False')) | string }}"
   with_items: "{{ subnets }}"
   register: vpc_subnets
+
+- name: obtain subnet info
+  ec2_vpc_subnet_facts:
+    filters:
+      vpc-id: "{{ vpc_create.vpc.id }}"
+    region: "{{ region }}"
+    profile: "{{ profile|default(omit) }}"
+  register: ec2_vpc_subnets
+
 
 - name: create internet gateway
   ec2_vpc_igw:
@@ -25,26 +35,43 @@
     region: "{{ region }}"
     profile: "{{ profile|default(omit) }}"
 
-- name: select public subnets
-  ec2_vpc_subnet_facts:
-    filters:
-      tag:Public: "True"
-      vpc-id: "{{ vpc_create.vpc.id }}"
-    region: "{{ region }}"
-    profile: "{{ profile|default(omit) }}"
-  register: public_subnets
-
 - name: create public route table
   ec2_vpc_route_table:
     tags:
       Name: public
-    subnets: "{{ public_subnets | json_query('subnets[].id') }}"
+    subnets: "{{ ec2_vpc_subnets | json_query('subnets[?tags.Public==`True`].id') }}"
     routes:
     - dest: 0.0.0.0/0
       gateway_id: igw
     vpc_id: "{{ vpc_create.vpc.id }}"
     region: "{{ region }}"
     profile: "{{ profile|default(omit) }}"
+
+- name: create NAT gateway
+  ec2_vpc_nat_gateway:
+    subnet_id: "{{ ec2_vpc_subnets | json_query('subnets[?tags.Name==`' + vpc_outbound_subnet + '`].id') | first }}"
+    region: "{{ region }}"
+    profile: "{{ profile|default(omit) }}"
+    if_exist_do_not_create: yes
+  register: nat_gateway
+  when: vpc_outbound_subnet is defined
+
+- name: select outbound subnets
+  set_fact:
+    outbound_subnets: "{{ ec2_vpc_subnets | json_query('subnets[?tags.Public==`False` && tags.NatGateway==`True`].id') }}"
+
+- name: create outbound route table
+  ec2_vpc_route_table:
+    tags:
+      Name: private
+    subnets: "{{ outbound_subnets }}"
+    routes:
+    - dest: 0.0.0.0/0
+      gateway_id: "{{ nat_gateway.nat_gateway_id }}"
+    vpc_id: "{{ vpc_create.vpc.id }}"
+    region: "{{ region }}"
+    profile: "{{ profile|default(omit) }}"
+  when: outbound_subnets
 
 - name: create security groups
   ec2_group:

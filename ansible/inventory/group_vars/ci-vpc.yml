@@ -10,14 +10,22 @@ subnets:
   public: "True"
   cidr: 10.1.2.0/24
   zone: ap-southeast-2a
+- name: ci-outbound-subnet
+  public: "True"
+  cidr: 10.1.3.0/24
+  zone: ap-southeast-2a
 - name: ci-jenkins-web-subnet
   public: "False"
   cidr: 10.1.11.0/24
   zone: ap-southeast-2a
+  nat_gateway: "True"
 - name: ci-jenkins-agent-subnet
   public: "False"
   cidr: 10.1.21.0/24
   zone: ap-southeast-2a
+  nat_gateway: "True"
+
+vpc_outbound_subnet: ci-outbound-subnet
 
 security_groups:
 - name: ci-jenkins-elb-sg

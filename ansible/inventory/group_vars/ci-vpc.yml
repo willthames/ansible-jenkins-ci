@@ -2,7 +2,7 @@ cidr: 10.1.0.0/16
 name: ci-vpc
 
 subnets:
-- name: ci-elb-subnet
+- name: ci-jenkins-elb-subnet
   public: "True"
   cidr: 10.1.1.0/24
   zone: ap-southeast-2a
@@ -10,17 +10,17 @@ subnets:
   public: "True"
   cidr: 10.1.2.0/24
   zone: ap-southeast-2a
-- name: ci-web-subnet
+- name: ci-jenkins-web-subnet
   public: "False"
   cidr: 10.1.11.0/24
   zone: ap-southeast-2a
-- name: ci-agent-subnet
+- name: ci-jenkins-agent-subnet
   public: "False"
   cidr: 10.1.21.0/24
   zone: ap-southeast-2a
 
 security_groups:
-- name: ci-elb-sg
+- name: ci-jenkins-elb-sg
   rules:
   - cidr_ip: 0.0.0.0/0
     ports:
@@ -32,25 +32,27 @@ security_groups:
   - cidr_ip: 0.0.0.0/0
     ports: 22
     proto: tcp
-- name: ci-web-sg
+- name: ci-jenkins-web-sg
   rules:
   - group_name: ci-bastion-sg
     ports: 22
     proto: tcp
-  - group_name: ci-elb-sg
+  - group_name: ci-jenkins-elb-sg
     ports: 8080
     proto: tcp
-- name: ci-agent-sg
+- name: ci-jenkins-agent-sg
   rules:
-  - group_name: ci-web-sg
+  - group_name: ci-jenkins-web-sg
     ports: 5000
     proto: tcp
 
 load_balancers:
-- name: jenkins-elb
+- name: ci-jenkins-elb
   zones:
   - ap-southeast-2a
   listeners:
   - protocol: http
     load_balancer_port: 80
     instance_port: 8080
+  tags:
+    Application: jenkins

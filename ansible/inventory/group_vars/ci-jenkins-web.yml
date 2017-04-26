@@ -1,0 +1,10 @@
+ec2_instance_size: t2.small
+ec2_instance_sg: ci-jenkins-web-sg
+ec2_instance_subnet: ci-jenkins-web-subnet
+ec2_instance_key_name: ci-jenkins-web
+ec2_instance_ssh_public_key_file: "~/.ssh/{{ ec2_instance_key_name }}.pub"
+ec2_instance_public_ip: no
+ec2_instance_application: jenkins-web
+
+jenkins_repo_url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+jenkins_repo_key_url: http://pkg.jenkins-ci.org/redhat-stable/jenkins-ci.org.key

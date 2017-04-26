@@ -1,0 +1,14 @@
+- hosts: ci-jenkins-web-runner
+
+  roles:
+  - ec2_instance
+
+- hosts: localhost
+
+  tasks:
+  - meta: refresh_inventory
+
+- hosts: tag_Application_jenkins_web
+
+  roles:
+  - geerlingguy.jenkins

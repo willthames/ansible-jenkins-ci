@@ -2,16 +2,26 @@
 ci-vpc-runner
 app-vpc-runner
 ci-bastion-runner
+ci-jenkins-web-runner
+ci-jenkins-agent-runner
 
 [ci:children]
 ci-vpc
 ci-bastion
+ci-jenkins-web
+ci-jenkins-agent
 
 [ci-vpc]
 ci-vpc-runner
 
 [ci-bastion]
 ci-bastion-runner
+
+[ci-jenkins-web]
+ci-jenkins-web-runner
+
+[ci-jenkins-agent]
+ci-jenkins-agent-runner
 
 [app-vpc]
 app-vpc-runner

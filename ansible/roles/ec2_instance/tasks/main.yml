@@ -1,3 +1,12 @@
+- name: determine whether the required instance exists
+  ec2_remote_facts:
+    filters:
+      tag:Application: "{{ ec2_instance_application }}"
+      tag:Environment: "{{ env }}"
+    profile: "{{ profile|default(omit) }}"
+    region: "{{ region }}"
+  register: ec2_remote_facts
+
 - name: determine ec2_instance subnet id
   ec2_vpc_subnet_facts:
     filters:
@@ -13,6 +22,12 @@
     profile: "{{ profile|default(omit) }}"
     region: "{{ region }}"
   with_file: "{{ ec2_instance_ssh_public_key_file }}"
+  when: not ec2_remote_facts.instances
+
+- name: set instance id fact
+  set_fact:
+    ec2_instance_id: "{{ ec2_remote_facts.instances[0].id }}"
+  when: ec2_remote_facts.instances
 
 - name: create ec2_instance instance
   ec2:
@@ -25,7 +40,11 @@
     group: "{{ ec2_instance_sg }}"
     image: "{{ ec2_instance_image }}"
     assign_public_ip: "{{ ec2_instance_public_ip }}"
+    instance_id: "{{ ec2_instance_id|default(omit) }}"
+    user_data: "{{ ec2_instance_user_data|default(omit) }}"
+    instance_profile: "{{ ec2_instance_instance_profile|default(omit) }}"
     wait: yes
     wait_timeout: 300
+    state: running
     profile: "{{ profile|default(omit) }}"
     region: "{{ region }}"

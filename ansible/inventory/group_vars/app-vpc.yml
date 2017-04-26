@@ -1,17 +1,17 @@
 env: app
-cidr: 10.2.0.0/16
-name: app-vpc
+vpc_cidr: 10.2.0.0/16
+vpc_name: app-vpc
 
 subnets:
-- name: app-elb
+- name: app-elb-subnet
   public: "True"
   cidr: 10.2.1.0/24
   zone: ap-southeast-2a
-- name: app-bastion
+- name: app-bastion-subnet
   public: "True"
   cidr: 10.2.2.0/24
   zone: ap-southeast-2a
-- name: app-web
+- name: app-web-subnet
   public: "False"
   cidr: 10.2.11.0/24
   zone: ap-southeast-2a

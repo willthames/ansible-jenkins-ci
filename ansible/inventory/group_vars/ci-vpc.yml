@@ -1,5 +1,5 @@
-cidr: 10.1.0.0/16
-name: ci-vpc
+vpc_cidr: 10.1.0.0/16
+vpc_name: ci-vpc
 
 subnets:
 - name: ci-jenkins-elb-subnet
@@ -34,6 +34,7 @@ security_groups:
     ports:
     - 80
     - 443
+    - 8080
     proto: tcp
 - name: ci-bastion-sg
   rules:
@@ -56,11 +57,11 @@ security_groups:
 
 load_balancers:
 - name: ci-jenkins-elb
-  zones:
-  - ap-southeast-2a
   listeners:
   - protocol: http
-    load_balancer_port: 80
+    load_balancer_port: 8080
     instance_port: 8080
   tags:
     Application: jenkins
+  subnet: ci-jenkins-elb-subnet
+  security_group: ci-jenkins-elb-sg

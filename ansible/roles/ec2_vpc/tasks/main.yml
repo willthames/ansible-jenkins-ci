@@ -1,7 +1,7 @@
 - name: ensure vpc exists
   ec2_vpc_net:
     name: "{{ env }}"
-    cidr_block: "{{ cidr }}"
+    cidr_block: "{{ vpc_cidr }}"
     region: "{{ region }}"
     profile: "{{ profile|default(omit) }}"
   register: vpc_create

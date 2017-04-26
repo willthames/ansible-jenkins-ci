@@ -3,6 +3,9 @@
     filters:
       tag:Application: "{{ ec2_instance_application }}"
       tag:Environment: "{{ env }}"
+      instance-state-name:
+      - stopped
+      - running
     profile: "{{ profile|default(omit) }}"
     region: "{{ region }}"
   register: ec2_remote_facts
@@ -45,6 +48,6 @@
     instance_profile: "{{ ec2_instance_instance_profile|default(omit) }}"
     wait: yes
     wait_timeout: 300
-    state: running
+    state: "{{ 'running' if ec2_instance_id is defined else 'present' }}"
     profile: "{{ profile|default(omit) }}"
     region: "{{ region }}"

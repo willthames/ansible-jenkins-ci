@@ -1,8 +1,24 @@
+- ec2_vpc_net_facts:
+    filters:
+      tag:Name: "{{ env }}"
+    region: "{{ region }}"
+    profile: "{{ profile|default(omit) }}"
+  register: ec2_vpc
+
+- ec2_vpc_subnet_facts:
+    filters:
+      vpc-id: "{{ ec2_vpc.vpcs[0].id }}"
+    region: "{{ region }}"
+    profile: "{{ profile|default(omit) }}"
+  register: ec2_subnets
+
 - ec2_elb_lb:
     name: "{{ item.name }}"
-    zones: "{{ item.zones }}"
     listeners: "{{ item.listeners }}"
     state: present
     region: "{{ region }}"
     profile: "{{ profile|default(omit) }}"
+    subnets: "{{ ec2_subnets | json_query('subnets[?tags.Name==`' + item.subnet + '`].id') }}"
+    security_group_names:
+      - "{{ item.security_group }}"
   with_items: "{{ load_balancers|default([]) }}"

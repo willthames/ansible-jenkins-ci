@@ -1,2 +1,6 @@
 region: ap-southeast-2
 ec2_instance_image: ami-fedafc9d # Centos 7 with updates for HVM
+ec2_instance_user_data: |
+  #!/bin/bash
+  # Allow ansible to run under sudo
+  sed -i 's/Default.*requiretty/#&/' /etc/sudoers

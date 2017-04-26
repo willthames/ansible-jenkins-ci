@@ -15,7 +15,7 @@ Then add the following to your .ssh/config
 # IP ranges for CI and App VPCs - you may need to change them in inventory/group_vars/ci-vpc.yml if they clash with your internal networks
 Host 10.1.* 10.2.*
   # Credit: https://10mi2.wordpress.com/2015/01/19/using-ssh-bastion-hosts-with-aws-and-dynamically-locating-them-with-ec2-tags/
-  ProxyCommand ssh -i ~/.ssh/bastion centos@`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Application,Values=bastion" | jq -r .Reservations[].Instances[].PublicDnsName` -W %h:%p
+  ProxyCommand ssh -i ~/.ssh/ci-bastion centos@`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Application,Values=bastion" | jq -r .Reservations[].Instances[].PublicDnsName` -W %h:%p
   User centos
   IdentityFile ~/.ssh/jenkins
 ```

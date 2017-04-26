@@ -1,0 +1,19 @@
+- name: find the Jenkins load balancer
+  ec2_elb_facts:
+    names: ci-jenkins-elb
+    profile: "{{ profile|default(omit) }}"
+    region: "{{ region }}"
+  register: jenkins_elb
+
+- name: Set the jenkins hostname fact
+  set_fact:
+    jenkins_hostname: "{{ jenkins_elb.elbs[0].dns_name }}"
+
+- name: Add the current instance to the ELB
+  ec2_elb:
+    instance_id: "{{ ec2_id }}"
+    ec2_elbs: ci-jenkins-elb
+    state: present
+    profile: "{{ profile|default(omit) }}"
+    region: "{{ region }}"
+    wait: no

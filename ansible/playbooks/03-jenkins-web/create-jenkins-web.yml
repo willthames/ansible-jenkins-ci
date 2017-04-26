@@ -9,6 +9,13 @@
   - meta: refresh_inventory
 
 - hosts: tag_Application_jenkins_web
+  connection: local
+
+  roles:
+  - jenkins-setup
+
+- hosts: tag_Application_jenkins_web
+  become: True
 
   roles:
   - geerlingguy.jenkins

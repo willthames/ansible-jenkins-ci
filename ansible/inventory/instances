@@ -1,2 +1,7 @@
 [ci-bastion]
 ci-bastion-instance
+
+[ci-jenkins-web:children]
+tag_Application_jenkins_web
+
+[tag_Application_jenkins_web]

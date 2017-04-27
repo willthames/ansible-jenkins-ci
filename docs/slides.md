@@ -36,6 +36,11 @@
 * Run `build` job on code change
 * Run `unit test` job when build is complete
 * Run `deploy` job if build tests pass
+
+---
+
+# Typical features of CI (2)
+
 * Run `integration test` job against deployment
 * Run `promote` job if `integration test` passes in test environment
 * Configure jobs to run only for certain
@@ -51,6 +56,10 @@ meaning that it was difficult to automate new jobs.
 
 Services such as Travis, Circle, Shippable etc. allow CI tasks to be
 specified in a configuration file alongside the code.
+
+---
+
+# Modern CI frameworks (2)
 
 More recently, Jenkins now allows the configuration of CI to be
 in code, through the Jenkinsfile. Gitlab CI also provides
@@ -76,6 +85,17 @@ three years [BAM-15087](https://jira.atlassian.com/browse/BAM-15087)
 
 ---
 
-# Running CI tests with Ansible
+# Running CI with Ansible
 
 [Demo]
+
+---
+
+# More details later...
+
+* Security, instance profiles
+* ASGs
+* AMI generation
+* Pipelines as code
+
+

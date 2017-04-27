@@ -16,6 +16,8 @@
 
 - hosts: tag_Application_jenkins_web
   become: True
+  vars_files:
+  - "{{ inventory_dir }}/../secrets/jenkins.yml"
 
   roles:
   - geerlingguy.jenkins

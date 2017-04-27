@@ -13,4 +13,3 @@ java_packages:
 jenkins_plugins:
 - workflow-aggregator
 - blueocean
-jenkins_admin_password: "admin123$$"  # this should be in vault

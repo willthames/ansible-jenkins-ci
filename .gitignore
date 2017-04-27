@@ -2,3 +2,4 @@
 ansible/inventory/ec2.ini
 ansible/roles/*.*
 ansible/ssh_config
+ansible/secrets

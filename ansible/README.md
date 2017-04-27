@@ -5,27 +5,33 @@
 Create an ssh key for sshing to the bastion and to jenkins
 
 ```
-ssh-keygen -f ~/.ssh/bastion
-ssh-keygen -f ~/.ssh/jenkins-web
+ssh-keygen -f ~/.ssh/ci-bastion
+ssh-keygen -f ~/.ssh/ci-jenkins-web
 ```
 
-Then add the following to your .ssh/config
-
-```
-# IP ranges for CI and App VPCs - you may need to change them in inventory/group_vars/ci-vpc.yml if they clash with your internal networks
-Host 10.1.* 10.2.*
-  # Credit: https://10mi2.wordpress.com/2015/01/19/using-ssh-bastion-hosts-with-aws-and-dynamically-locating-them-with-ec2-tags/
-  ProxyCommand ssh -i ~/.ssh/ci-bastion centos@`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=tag:Application,Values=bastion" | jq -r .Reservations[].Instances[].PublicDnsName` -W %h:%p
-  User centos
-  IdentityFile ~/.ssh/jenkins
-```
-
+Running the playbook that creates the bastion will generate
+an ssh_config file that can be used to connect to your instances.
+`ansible.cfg` is configured to use that file automatically, should
+you wish to manually ssh to your instances, use `ssh -F ssh_config`
 
 ## Install third party libraries
 
 ```
 ansible-galaxy install -r requirements.yml -p roles
 ```
+
+## Create a secrets file for the jenkins admin password
+
+```
+ansible-vault create secrets/jenkins.yml
+```
+and add
+```
+jenkins_admin_password: password_of_your_choice
+```
+
+You can create `~/.ansible/vault/password/ansible-jenkins-ci` if
+you don't want to type the vault password each time.
 
 ## Set up ec2.ini
 

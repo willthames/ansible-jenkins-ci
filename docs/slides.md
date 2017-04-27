@@ -14,9 +14,8 @@
 
 # Resources
 
-* Repository
-* Slides
-* Code
+* Slides: [http://willthames.github.io/ansible-jenkins-ci](http://willthames.github.io/ansible-jenkins-ci)
+* Code (including slides): [https://github.com/willthames/ansible-jenkins-ci](https://github.com/willthames/ansible-jenkins-ci)
 
 ---
 

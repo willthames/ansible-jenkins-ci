@@ -1,4 +1,4 @@
-ec2_instance_ssh_public_key_file: "~/.ssh/ci-bastion.pub"
+ec2_instance_ssh_public_key_file: "~/.ssh/{{ ec2_instance_key_name }}.pub"
 ec2_instance_size: t2.nano
 ec2_instance_sg: ci-bastion-sg
 ec2_instance_subnet: ci-bastion-subnet

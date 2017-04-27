@@ -1,8 +1,9 @@
 # IP ranges for CI and App VPCs - you may need to change them in inventory/group_vars/ci-vpc.yml if they clash with your internal networks
 Host {{ bastion_dns_name }}
   User centos
-  IdentityFile ~/.ssh/ci-bastion
+  IdentityFile ~/.ssh/{{ ec2_instance_key_name }}
+
 Host 10.1.* 10.2.*
-  ProxyCommand ssh -i ~/.ssh/ci-bastion centos@{{ bastion_dns_name }} -W %h:%p
+  ProxyCommand ssh -i ~/.ssh/{{ ec2_instance_key_name }} centos@{{ bastion_dns_name }} -W %h:%p
   User centos
   IdentityFile ~/.ssh/ci-jenkins-web

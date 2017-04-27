@@ -1,8 +1,8 @@
 - name: determine remote bastion dns
   ec2_remote_facts:
     filters:
-      tag:Application: bastion
-      tag:Environment: ci
+      tag:Application: "{{ ec2_instance_application }}"
+      tag:Environment: "{{ env }}"
       instance-state-name:
       - running
     profile: "{{ profile|default(omit) }}"

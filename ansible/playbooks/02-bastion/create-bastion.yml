@@ -2,3 +2,4 @@
 
   roles:
   - ec2_instance
+  - ssh_config

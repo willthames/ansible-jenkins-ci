@@ -24,8 +24,8 @@
     key_material: "{{ item }}"
     profile: "{{ profile|default(omit) }}"
     region: "{{ region }}"
+    force: yes
   with_file: "{{ ec2_instance_ssh_public_key_file }}"
-  when: not ec2_remote_facts.instances
 
 - name: set instance id fact
   set_fact:
@@ -51,3 +51,4 @@
     state: "{{ 'running' if ec2_instance_id is defined else 'present' }}"
     profile: "{{ profile|default(omit) }}"
     region: "{{ region }}"
+  register: ec2_instance_facts

@@ -1,0 +1,20 @@
+- name: determine remote bastion dns
+  ec2_remote_facts:
+    filters:
+      tag:Application: bastion
+      tag:Environment: ci
+      instance-state-name:
+      - running
+    profile: "{{ profile|default(omit) }}"
+    region: "{{ region }}"
+  register: bastion_instances
+
+- name: set bastion_dns_name fact
+  set_fact:
+    bastion_dns_name: "{{ bastion_instances.instances[0].public_dns_name }}"
+
+- name: install ssh_config file
+  template:
+    src: ssh_config
+    dest: "{{ inventory_dir }}/../ssh_config"
+    mode: 0600
